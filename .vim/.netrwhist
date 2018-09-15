@@ -1,0 +1,6 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =4
+let g:netrw_dirhist_1='/home/hiroki/LaTex/Raport/MineSweeper/Section2'
+let g:netrw_dirhist_2='/home/hiroki/School/Jikken/J4/No1'
+let g:netrw_dirhist_3='/home/hiroki/School/Jikken/J4/MinSquare/lsm'
+let g:netrw_dirhist_4='/home/hiroki/LaTex/Raport/MineSweeper/Section1/Chapter4'
