@@ -6,17 +6,40 @@
 """"""""""""""""""""""""""""""
 call plug#begin('~/.vim/plugged')
 
-" ファイルオープンを便利に
-Plug 'Shougo/unite.vim'
-" Unite.vimで最近使ったファイルを表示できるようにする
-Plug 'Shougo/neomru.vim'
-" ...省略
+" ファイルをtree表示してくれる
+Plug 'scrooloose/nerdtree'
+
+" インデントに色を付けて見やすくする
+Plug 'nathanaelkane/vim-indent-guides'
+" vimを立ち上げたときに、自動的にvim-indent-guidesをオンにする
+let g:indent_guides_enable_on_vim_startup = 1
+
+" 行末の半角スペースを可視化
+Plug 'bronson/vim-trailing-whitespace'
+
+" Gitを便利に使う
+Plug 'tpope/vim-fugitive'
+" grep検索の実行後にQuickFix Listを表示する
+autocmd QuickFixCmdPost *grep* cwindow
+" ステータス行に現在のgitブランチを表示する
+set statusline+=%{fugitive#statusline()}
+
+" 自作チートシートの表示
+Plug 'reireias/vim-cheatsheet'
+" チートシートのパス
+let g:cheatsheet#cheat_file = '~/.cheatsheet.md'
+
+" MarkDownリアルタイムプレビュー
+Plug 'iamcco/markdown-preview.vim'
+
+" コメントON/OFFを手軽に実行
+Plug 'tomtom/tcomment_vim'
 
 call plug#end()
-""""""""""""""""""""""""""""""
+
 
 """"""""""""""""""""""""""""""
-" 以下標準設定
+" 標準設定
 """"""""""""""""""""""""""""""
 "-------------------------------
 " テーマ                       -
@@ -104,3 +127,59 @@ set wrapscan
 
 " 検索結果をハイライト表示
 set hlsearch
+
+""""""""""""""""""""""""
+" 自動的に閉じ括弧を入力
+""""""""""""""""""""""""
+imap { {}<LEFT>
+imap [ []<LEFT>
+imap ( ()<LEFT>
+
+"""""""""""""""""""""""""""""""""""""""""""
+" 挿入モード時、ステータスラインの色を変更
+"""""""""""""""""""""""""""""""""""""""""""
+let g:hi_insert = 'highlight StatusLine guifg=darkblue guibg=darkyellow gui=none ctermfg=blue ctermbg=yellow cterm=none'
+
+if has('syntax')
+  augroup InsertHook
+    autocmd!
+    autocmd InsertEnter * call s:StatusLine('Enter')
+    autocmd InsertLeave * call s:StatusLine('Leave')
+  augroup END
+endif
+
+let s:slhlcmd = ''
+function! s:StatusLine(mode)
+  if a:mode == 'Enter'
+    silent! let s:slhlcmd = 'highlight ' . s:GetHighlight('StatusLine')
+    silent exec g:hi_insert
+  else
+    highlight clear StatusLine
+    silent exec s:slhlcmd
+  endif
+endfunction
+
+function! s:GetHighlight(hi)
+  redir => hl
+  exec 'highlight '.a:hi
+  redir END
+  let hl = substitute(hl, '[\r\n]', '', 'g')
+  let hl = substitute(hl, 'xxx', '', '')
+  return hl
+endfunction
+
+""""""""""""""""""""""""""""""
+" 全角スペースの表示
+""""""""""""""""""""""""""""""
+function! ZenkakuSpace()
+    highlight ZenkakuSpace cterm=underline ctermfg=lightblue guibg=darkgray
+endfunction
+
+if has('syntax')
+    augroup ZenkakuSpace
+        autocmd!
+        autocmd ColorScheme * call ZenkakuSpace()
+        autocmd VimEnter,WinEnter,BufRead * let w:m1=matchadd('ZenkakuSpace', '　')
+    augroup END
+    call ZenkakuSpace()
+endif
