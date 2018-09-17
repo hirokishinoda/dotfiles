@@ -69,7 +69,7 @@ syntax on
 
 " 文字コードをutf-8に設定
 set encoding=utf-8
-set fileencodings=iso-2022-jp,euc-jp,sjis,utf-8
+set fileencodings=utf-8,iso-2022-jp,euc-jp,sjis
 set fileformats=unix,dos,mac
 
 " スワップファイルを作らない
@@ -109,6 +109,31 @@ set expandtab
 set tabstop=2
 set shiftwidth=2
 
+"-------------------
+" ステータスバー関連
+"-------------------
+
+" ステータスバーの表示(0:非表示,1:2ウィンドウ以上で表示,2:表示)
+set laststatus=2
+
+" ファイル名表示
+set statusline=%F
+
+" 読み込み専用か
+set statusline+=%m
+
+" これ以降は右寄せ表示
+set statusline+=%=
+
+" file encoding
+set statusline+=[ENC=%{&fileencoding}]
+
+" 現在行数/全行数
+set statusline+=[LOW=%l/%L]
+
+" gitのブランチ名
+set statusline+=%{fugitive#statusline()}
+
 "-------------------------------
 " 検索関係                     -
 "-------------------------------
@@ -128,16 +153,16 @@ set wrapscan
 " 検索結果をハイライト表示
 set hlsearch
 
-""""""""""""""""""""""""
+"------------------------
 " 自動的に閉じ括弧を入力
-""""""""""""""""""""""""
+"------------------------
 imap { {}<LEFT>
 imap [ []<LEFT>
 imap ( ()<LEFT>
 
-"""""""""""""""""""""""""""""""""""""""""""
+"------------------------------------------
 " 挿入モード時、ステータスラインの色を変更
-"""""""""""""""""""""""""""""""""""""""""""
+"------------------------------------------
 let g:hi_insert = 'highlight StatusLine guifg=darkblue guibg=darkyellow gui=none ctermfg=blue ctermbg=yellow cterm=none'
 
 if has('syntax')
@@ -168,9 +193,9 @@ function! s:GetHighlight(hi)
   return hl
 endfunction
 
-""""""""""""""""""""""""""""""
+"--------------------
 " 全角スペースの表示
-""""""""""""""""""""""""""""""
+"--------------------
 function! ZenkakuSpace()
     highlight ZenkakuSpace cterm=underline ctermfg=lightblue guibg=darkgray
 endfunction
