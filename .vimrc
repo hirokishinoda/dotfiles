@@ -21,8 +21,6 @@ Plug 'bronson/vim-trailing-whitespace'
 Plug 'tpope/vim-fugitive'
 " grep検索の実行後にQuickFix Listを表示する
 autocmd QuickFixCmdPost *grep* cwindow
-" ステータス行に現在のgitブランチを表示する
-set statusline+=%{fugitive#statusline()}
 
 " 自作チートシートの表示
 Plug 'reireias/vim-cheatsheet'
@@ -37,6 +35,10 @@ Plug 'tomtom/tcomment_vim'
 
 call plug#end()
 
+" ステータス行に現在のgitブランチを表示する
+if isdirectory(expand('~/.vim/bundle/vim-fugitive'))
+  set statusline+=%{fugitive#statusline()}
+endif
 
 """"""""""""""""""""""""""""""
 " 標準設定
